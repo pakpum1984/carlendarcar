@@ -33,7 +33,6 @@
 </head>
 <body>
 <div class="container"><br>
-    33
    <button id="updateButton" style="display: none;"></button>
     <div id="calendar"></div>
     <div>
@@ -41,79 +40,69 @@
   
     <script>
 
-      var isFirstLoad = true;
+     
 
 
+      
+        function updateCalendar() {
+            // $.LoadingOverlay("show");
 
-      function updateCalendar() {
-          if (isFirstLoad) {
-              $.LoadingOverlay("show");
-          }
+            $.ajax({
+                url: 'https://script.google.com/macros/s/AKfycbzDWCEbV3Z-9lyz6A9gLZ_JIUG17ch1Vd9FyDs5Fe_WX6HINdPLChcNMMTFoZIDRfoCWw/exec',
+                dataType: 'json',
+                success: function(data) {
 
-          $.ajax({
-              url: 'https://script.google.com/macros/s/AKfycbzDWCEbV3Z-9lyz6A9gLZ_JIUG17ch1Vd9FyDs5Fe_WX6HINdPLChcNMMTFoZIDRfoCWw/exec',
-              dataType: 'json',
-              success: function(data) {
                   var events = [];
 
+                  // สร้าง events จากข้อมูลที่ได้รับ
                   for (var i = 0; i < data.length; i++) {
-                      events.push({
-                          title: data[i].title,
-                          starttime: data[i].starttime,
-                          endtime: data[i].endtime,
-                          start: data[i].start,
-                          namebook: data[i].namebook,
-                          loca: data[i].loca,
-                          other: data[i].other,
-                          status: data[i].status,
-                          driver: data[i].driver,
-                          approve: data[i].approve
-                      });
+                    events.push({
+                      title: data[i].title,
+                      starttime: data[i].starttime,
+                      endtime: data[i].endtime,
+                      start: data[i].start,
+                      namebook: data[i].namebook,
+                      loca: data[i].loca,
+                      other: data[i].other,
+                      status: data[i].status,
+                      driver: data[i].driver,
+                      approve: data[i].approve
+                    });
                   }
+                  
+                    localStorage.setItem('cachedData', JSON.stringify(data));
+                    $('#calendar').fullCalendar('removeEvents');
+                    $('#calendar').fullCalendar('addEventSource', data);
+                    // $.LoadingOverlay("hide");
+                },
+                error: function() {
+                    alert('เกิดข้อผิดพลาดในการโหลดข้อมูล');
+                    // $.LoadingOverlay("hide");
+                }
+            });
+        }
 
-                  localStorage.setItem('cachedData', JSON.stringify(data));
-                  $('#calendar').fullCalendar('removeEvents');
-                  $('#calendar').fullCalendar('addEventSource', data);
+        $(document).ready(function() {
+        
+            $('#updateButton').click(function() {
+                updateCalendar();
+          
+            });
 
-                  if (isFirstLoad) {
-                      $.LoadingOverlay("hide");
-                      isFirstLoad = false;
-                  }
-              },
-              error: function() {
-                  alert('เกิดข้อผิดพลาดในการโหลดข้อมูล');
-                  if (isFirstLoad) {
-                      $.LoadingOverlay("hide");
-                      isFirstLoad = false;
-                  }
-              }
-          });
-      }
+            // $.LoadingOverlaySetup({
+            //     size: "12",
+            //     imageColor: "#0d6efd"
+            // });
 
+            var cachedData = localStorage.getItem('cachedData');
 
-      $(document).ready(function() {
-      $('#updateButton').click(function() {
-          updateCalendar();
-      });
-
-      $.LoadingOverlaySetup({
-          size: "12",
-          imageColor: "#0d6efd"
-      });
-
-      var cachedData = localStorage.getItem('cachedData');
-
-      if (cachedData) {
-          var parsedData = JSON.parse(cachedData);
-          renderData(parsedData);
-          if (isFirstLoad) {
-              $.LoadingOverlay("hide");
-              isFirstLoad = false;
-          }
-      } else {
-          updateCalendar();
-      }
-
+            if (cachedData) {
+                var parsedData = JSON.parse(cachedData);
+                renderData(parsedData);
+                // $.LoadingOverlay("hide");
+            } else {
+                updateCalendar();
+            }
 
             function renderData(data) {
                 $('#calendar').fullCalendar({
@@ -212,17 +201,10 @@
         });
 
         // อัปเดตปฏิทินเมื่อรีเฟรชหน้าจอ
-        // $(window).on('load', function() {
-        //     updateCalendar();
+        $(window).on('load', function() {
+            updateCalendar();
                   
-        // });
-
-      $(window).on('load', function() {
-         updateCalendar();
-          if (isFirstLoad) {
-              location.reload();
-          }
-      });
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </body>

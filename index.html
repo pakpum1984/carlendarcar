@@ -33,10 +33,10 @@
 </head>
 <body>
 <div class="container"><br>
-  <h4 class="text-center" id="loadingpagecalendar">กำลังโหลดข้อมูล...</h4>
+  555
    <button id="updateButton" style="display: none;"></button>
     <div id="calendar"></div>
-    <div>
+    </div>
        
   
     <script>
@@ -152,12 +152,17 @@
         }
 
         $(document).ready(function() {
+          $.LoadingOverlaySetup({
+              size: "12",
+              imageColor: "#0d6efd"
+          });
+          $.LoadingOverlay("show");
             var cachedData = localStorage.getItem('cachedData');
 
             if (cachedData) {
                 var parsedData = JSON.parse(cachedData);
                 renderData(parsedData);
-              $('#loadingpagecalendar').hide();
+              $.LoadingOverlay("hide");
             } else {
                 updateCalendar();
             }

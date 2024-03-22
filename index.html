@@ -72,7 +72,7 @@
                     });
                   }
                   
-                    localStorage.setItem('cachedData', JSON.stringify(data));
+                       location.reload();           localStorage.setItem('cachedData', JSON.stringify(data));
                     $('#calendar').fullCalendar('removeEvents');
                     $('#calendar').fullCalendar('addEventSource', data);
                     // $.LoadingOverlay("hide");

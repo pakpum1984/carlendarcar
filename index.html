@@ -33,7 +33,7 @@
 </head>
 <body>
 <div class="container"><br>
- 999
+ 000
    <button id="updateButton" style="display: none;"></button>
     <div id="calendar"></div>
     </div>
@@ -49,6 +49,7 @@
                 success: function(data) {
                     localStorage.setItem('cachedData', JSON.stringify(data));
                     renderData(data);
+                     $.LoadingOverlay("hide");
                 },
                 error: function() {
                     alert('เกิดข้อผิดพลาดในการโหลดข้อมูล');
@@ -166,7 +167,7 @@
             } else {
                 updateCalendar();
             }
-            $.LoadingOverlay("hide");
+       
         });
 
       // อัปเดตปฏิทินเมื่อรีเฟรชหน้าจอ

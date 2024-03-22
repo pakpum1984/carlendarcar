@@ -33,7 +33,7 @@
 </head>
 <body>
 <div class="container"><br>
-    444
+  <h4 class="text-center" id="loadingpagecalendar">กำลังโหลดข้อมูล...</h4>
    <button id="updateButton" style="display: none;"></button>
     <div id="calendar"></div>
     <div>
@@ -157,6 +157,7 @@
             if (cachedData) {
                 var parsedData = JSON.parse(cachedData);
                 renderData(parsedData);
+              $('#loadingpagecalendar').hide();
             } else {
                 updateCalendar();
             }

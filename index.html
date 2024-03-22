@@ -70,26 +70,35 @@
                 locale: 'th',
                 nextDayThreshold: '00:00:00',
                 dayNamesShort: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
-                eventRender: function(event, element) {
-                    element.find('.fc-time').hide();
-                    element.find('.fc-title').html(event.title + '<br>' + event.starttime + ' ถึง ' + event.endtime + ' น. ');
+                 eventRender: function(event, element) {
+                  var currentMonth = $('#calendar').fullCalendar('getDate').month();
+                  var eventMonth = moment(event.start).month();
 
-                    if (event.status === 'รออนุมัติ') {
-                        element.css('background-color', 'yellow');
-                        element.find('.fc-title').css('color', 'black');
-                    } else if (event.status === 'อนุมัติ') {
-                        element.css('background-color', 'green');
-                    } else if (event.status === 'เสร็จงาน') {
-                        element.css('background-color', 'blue');
-                    } else if (event.status === 'กำลังใช้งาน') {
-                        element.css('background-color', 'green');
-                        setInterval(function() {
-                            element.fadeOut(500, function() {
-                                element.fadeIn(500);
-                            });
-                        }, 1000);
-                    }
-                },
+                  if (currentMonth === eventMonth) {
+                      element.find('.fc-time').hide();
+                      element.find('.fc-title').html(event.title + '<br>' + event.starttime + ' ถึง ' + event.endtime + ' น. ');
+
+                      if (event.status === 'รออนุมัติ') {
+                          element.css('background-color', 'yellow');
+                          element.find('.fc-title').css('color', 'black');
+                      } else if (event.status === 'อนุมัติ') {
+                          element.css('background-color', 'green');
+                      } else if (event.status === 'เสร็จงาน') {
+                          element.css('background-color', 'blue');
+                      } else if (event.status === 'กำลังใช้งาน') {
+                          element.css('background-color', 'green');
+                          setInterval(function() {
+                              element.fadeOut(500, function() {
+                                  element.fadeIn(500);
+                              });
+                          }, 1000);
+                      }
+                  } else {
+                      element.hide(); // ซ่อน event ของเดือนที่ไม่ใช่เดือนปัจจุบัน
+                  }
+
+             
+              },
                 events: data,
                 eventClick: function(event) {
                     // แสดง Popup รายละเอียดเมื่อคลิกที่ event
